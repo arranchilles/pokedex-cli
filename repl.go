@@ -1,0 +1,80 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"pokedex/pokecache"
+	"strings"
+	"time"
+)
+
+func cleanInput(text string) []string {
+	if len(text) == 0 {
+		return []string{}
+	}
+	text = strings.Trim(text, " ")
+	text = strings.ToLower(text)
+	pieces := strings.Split(text, " ")
+	return pieces
+}
+
+func repl() {
+	commands := getCommands()
+	scanner := bufio.NewScanner(os.Stdin)
+	configData := config{Cache: *pokecache.NewCache(time.Second * 5)}
+	for {
+		fmt.Print("Pokedex >")
+		scanner.Scan()
+		input := scanner.Text()
+		cleanedInput := cleanInput(input)
+		if len(cleanedInput) == 0 {
+			continue
+		}
+		if _, exists := commands[cleanedInput[0]]; !exists {
+			fmt.Printf("Unknown command\n")
+			continue
+		}
+		commands[cleanedInput[0]].callback(&configData)
+	}
+}
+
+type Command struct {
+	name        string
+	description string
+	callback    func(*config) error
+}
+
+type config struct {
+	Next     string
+	Previous string
+	Cache    pokecache.Cache
+}
+
+type Commands map[string]Command
+
+func getCommands() Commands {
+	Commands := Commands{
+		"exit": {
+			name:        "exit",
+			description: "Exit the Pokedex",
+			callback:    commandExit,
+		},
+		"help": {
+			name:        "help",
+			description: "Displays a help message",
+			callback:    commandHelp,
+		},
+		"map": {
+			name:        "map",
+			description: "Retrieves 20 map locations",
+			callback:    commandMap,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Retrieves the 20 previous locations",
+			callback:    commandMapb,
+		},
+	}
+	return Commands
+}
