@@ -5,14 +5,14 @@ import (
 	"pokedex/pokeapi"
 )
 
-type Pokemon struct {
+type PokemonURL struct {
 	Name string `json:"name"`
 	URL  string `json:"url"`
 }
 
 type SpecificLocationResponse struct {
 	PokemonEncounters []struct {
-		Pokemon Pokemon `json:"pokemon"`
+		Pokemon PokemonURL `json:"pokemon"`
 	} `json:"pokemon_encounters"`
 }
 

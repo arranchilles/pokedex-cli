@@ -22,7 +22,7 @@ func cleanInput(text string) []string {
 func repl() {
 	commands := getCommands()
 	scanner := bufio.NewScanner(os.Stdin)
-	configData := config{Cache: *pokecache.NewCache(time.Second * 5)}
+	configData := config{Cache: *pokecache.NewCache(time.Second * 5), Pokedex: Pokedex{}}
 	for {
 		fmt.Print("Pokedex > ")
 		scanner.Scan()
@@ -53,6 +53,7 @@ type config struct {
 	Next     string
 	Previous string
 	Cache    pokecache.Cache
+	Pokedex  Pokedex
 }
 
 type Commands map[string]Command
@@ -83,6 +84,16 @@ func getCommands() Commands {
 			name:        "explore",
 			description: "Lists the pokemon of an area",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Attempt to catch pokemon and add to the pokedex",
+			callback:    commandCatch,
+		},
+		"inspect": {
+			name:        "inspect",
+			description: "Describes the characteristics of a pokemon",
+			callback:    commandInspect,
 		},
 	}
 	return Commands
