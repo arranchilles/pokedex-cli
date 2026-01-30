@@ -24,7 +24,7 @@ func repl() {
 	scanner := bufio.NewScanner(os.Stdin)
 	configData := config{Cache: *pokecache.NewCache(time.Second * 5)}
 	for {
-		fmt.Print("Pokedex >")
+		fmt.Print("Pokedex > ")
 		scanner.Scan()
 		input := scanner.Text()
 		cleanedInput := cleanInput(input)
@@ -35,14 +35,18 @@ func repl() {
 			fmt.Printf("Unknown command\n")
 			continue
 		}
-		commands[cleanedInput[0]].callback(&configData)
+		err := commands[cleanedInput[0]].callback(&configData, cleanedInput[1:]...)
+
+		if err != nil {
+			fmt.Println(err.Error())
+		}
 	}
 }
 
 type Command struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 type config struct {
@@ -74,6 +78,11 @@ func getCommands() Commands {
 			name:        "mapb",
 			description: "Retrieves the 20 previous locations",
 			callback:    commandMapb,
+		},
+		"explore": {
+			name:        "explore",
+			description: "Lists the pokemon of an area",
+			callback:    commandExplore,
 		},
 	}
 	return Commands

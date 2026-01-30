@@ -19,7 +19,7 @@ type LocationAreaURL struct {
 	Url  string `json:"url"`
 }
 
-func commandMap(config *config) error {
+func commandMap(config *config, args ...string) error {
 
 	if config.Next == "" {
 		config.Next = "https://pokeapi.co/api/v2/location-area/"
@@ -47,7 +47,7 @@ func commandMap(config *config) error {
 	return nil
 }
 
-func commandMapb(config *config) error {
+func commandMapb(config *config, args ...string) error {
 
 	if config.Previous == "" {
 		config.Previous = "https://pokeapi.co/api/v2/location-area/"
