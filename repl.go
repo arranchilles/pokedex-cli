@@ -95,6 +95,11 @@ func getCommands() Commands {
 			description: "Describes the characteristics of a pokemon",
 			callback:    commandInspect,
 		},
+		"pokedex": {
+			name:        "pokedex",
+			description: "Lists the pokemon stored in your pokedex",
+			callback:    commandPokedex,
+		},
 	}
 	return Commands
 }

@@ -10,7 +10,7 @@ func commandHelp(config *config, args ...string) error {
 	fmt.Println("Usage:")
 
 	for name := range commands {
-		fmt.Printf("%s: %s\n", commands[name].name, commands[name].description)
+		fmt.Printf("%s: %s \n", commands[name].name, commands[name].description)
 	}
 	return nil
 }
